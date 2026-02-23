@@ -1,6 +1,9 @@
 from django.db import models
+from users.models import User
+
 
 class Habit(models.Model):
+    """Модель привычка"""
     ACTION_CHOICES = [
         ('полезная', 'Полезная'),
         ('приятная', 'Приятная'),
