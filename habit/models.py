@@ -4,6 +4,7 @@ from users.models import User
 
 class Habit(models.Model):
     """Модель привычка"""
+    objects = None
     ACTION_CHOICES = [
         ('полезная', 'Полезная'),
         ('приятная', 'Приятная'),
@@ -17,7 +18,7 @@ class Habit(models.Model):
     related_habit = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL,
                                       related_name='related_habits', verbose_name='Связанная привычка ')
     period = models.PositiveIntegerField(default=1, verbose_name='Периодичность выполнения привычки')
-    reward = models.CharField(max_length=150, verbose_name='Вознаграждение')
+    reward = models.CharField(max_length=150, verbose_name='Вознаграждение', null=True, blank=True)
     duration = models.PositiveIntegerField(verbose_name='Продолжительность выполнения привычки')
     is_public = models.BooleanField(default=False, verbose_name='Признак публичности')
 
