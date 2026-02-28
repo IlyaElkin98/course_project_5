@@ -4,6 +4,7 @@ from .managers import UserManager
 
 class User(AbstractUser):
     """Модель пользователя"""
+    username = None
     email = models.EmailField(max_length=100, verbose_name='Электронная почта',
                               help_text='Введите адрес электронной почты', unique=True)
     phone = models.CharField(max_length=15, verbose_name='Номер телефона')
