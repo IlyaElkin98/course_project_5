@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from rest_framework import viewsets
 
 from habit.models import Habit
@@ -14,7 +16,7 @@ class HabitViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         """Определяем права доступа с учетом запрашиваемого действия"""
         if self.action == 'create':
-            self.permission_classes = [~IsOwner]
+            self.permission_classes = [IsOwner]
         elif self.action in ['list', 'retrieve', 'update']:
             self.permission_classes = [IsOwner]
         elif self.action == 'destroy':
@@ -26,6 +28,7 @@ class HabitViewSet(viewsets.ModelViewSet):
         new_habit = serializer.save()
         new_habit.is_owner = self.request.user
         new_habit.save()
+
 
     def get_queryset(self):
         """Фильтруем данные в зависимости от прав доступа"""
