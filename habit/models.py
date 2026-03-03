@@ -21,7 +21,8 @@ class Habit(models.Model):
     reward = models.CharField(max_length=150, verbose_name='Вознаграждение', null=True, blank=True)
     duration = models.PositiveIntegerField(verbose_name='Продолжительность выполнения привычки')
     is_public = models.BooleanField(default=False, verbose_name='Признак публичности')
-    is_owner = models.ForeignKey(User, related_name='lesson', on_delete=models.CASCADE, verbose_name='Признак собственности', null=True, blank=True)
+    is_owner = models.ForeignKey(User, related_name='lesson', on_delete=models.CASCADE,
+                                 verbose_name='Признак собственности', null=True, blank=True)
 
     def __str__(self):
         return f'{self.action} в {self.time} в {self.location}'
@@ -29,6 +30,3 @@ class Habit(models.Model):
     class Meta:
         verbose_name = "Привычка"
         verbose_name_plural = "Привычки"
-
-
-

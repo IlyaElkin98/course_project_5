@@ -1,6 +1,6 @@
 import requests
-
 from config import settings
+
 
 def send_telegram_message(text, chat_id):
     params = {
@@ -11,4 +11,3 @@ def send_telegram_message(text, chat_id):
 
     if response.status_code != 200:
         print(f"Ошибка отправки сообщения: {response.text}")
-

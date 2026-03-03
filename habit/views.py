@@ -1,7 +1,4 @@
-from datetime import datetime, timedelta
-
 from rest_framework import viewsets
-
 from habit.models import Habit
 from habit.paginations import CustomPagination
 from habit.serializers import HabitSerializer
@@ -29,10 +26,8 @@ class HabitViewSet(viewsets.ModelViewSet):
         new_habit.is_owner = self.request.user
         new_habit.save()
 
-
     def get_queryset(self):
         """Фильтруем данные в зависимости от прав доступа"""
         if self.request.user.is_authenticated:
-            # Если у пользователя есть привычки, вернуть только их
-            return self.queryset.filter(user=self.request.user)  # Либо другие условия
+            return self.queryset.filter(user=self.request.user)
         return self.queryset.none()

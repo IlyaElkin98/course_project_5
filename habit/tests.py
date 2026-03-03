@@ -8,7 +8,8 @@ from habit.models import Habit
 class HabitViewSetTest(APITestCase):
     def setUp(self):
         self.user = User.objects.create(email='test@mail.ru')
-        self.habit = Habit.objects.create(location="Улица", action="Прогулка", time="14:30:00", duration=10, user=self.user)
+        self.habit = Habit.objects.create(location="Улица", action="Прогулка",
+                                          time="14:30:00", duration=10, user=self.user)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
@@ -18,7 +19,6 @@ class HabitViewSetTest(APITestCase):
         data = response.json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data.get("action"), self.habit.action)
-
 
     def test_create_habit(self):
         url = reverse('habit:habit-list')
@@ -35,8 +35,6 @@ class HabitViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Habit.objects.count(), 2)
 
-
-
     def test_update_habit(self):
         data = {
             "location": "Park",
@@ -48,7 +46,6 @@ class HabitViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.habit.refresh_from_db()
         self.assertEqual(self.habit.location, "Park")  # Проверяем, что привычка обновилась
-
 
     def test_delete_habit(self):
         response = self.client.delete(reverse('habit:habit-detail', kwargs={'pk': self.habit.pk}), format='json')
