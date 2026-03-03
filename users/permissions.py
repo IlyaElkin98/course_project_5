@@ -5,6 +5,4 @@ class IsOwner(BasePermission):
     """Проверяет, является ли пользователь владельцем."""
 
     def has_object_permission(self, request, view, obj):
-        if obj.is_owner == request.user:
-            return True
-        return False
+        return request.user.is_superuser or obj.user.id == request.user.id

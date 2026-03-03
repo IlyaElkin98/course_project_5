@@ -17,7 +17,7 @@ class HabitViewSet(viewsets.ModelViewSet):
         """Определяем права доступа с учетом запрашиваемого действия"""
         if self.action == 'create':
             self.permission_classes = [IsOwner]
-        elif self.action in ['list', 'retrieve', 'update']:
+        elif self.action in ['list', 'retrieve', 'partial_update']:
             self.permission_classes = [IsOwner]
         elif self.action == 'destroy':
             self.permission_classes = [IsOwner]
