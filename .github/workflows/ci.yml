@@ -44,6 +44,6 @@ jobs:
           SERVER_IP: ${{ secrets.SERVER_IP }}
           USERNAME: ${{ secrets.USERNAME }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./* $USERNAME@$SERVER_IP:/path/to/your/project
+          sudo echo "$SSH_PRIVATE_KEY" > private_key.pem
+          sudo chmod 600 private_key.pem
+          sudo scp -o StrictHostKeyChecking=no -i private_key.pem -r ./* $USERNAME@$SERVER_IP:/path/to/your/project
