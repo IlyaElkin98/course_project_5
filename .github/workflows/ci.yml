@@ -26,24 +26,16 @@ jobs:
     needs: test
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.1
         with:
-          python-version: '3.13'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirement.txt
+          ssh-private-key: ${{ secrets.SSH_KEY }}
 
       - name: Deploy to Server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          USERNAME: ${{ secrets.USERNAME }}
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          scp -o StrictHostKeyChecking=no -i private_key.pem -r ./* $USERNAME@$SERVER_IP:/path/to/your/project
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          EOF
