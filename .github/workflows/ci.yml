@@ -65,4 +65,3 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
             sudo systemctl restart myapp.service
           EOF
-
