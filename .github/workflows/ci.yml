@@ -33,12 +33,12 @@ jobs:
       - name: Deploy to the server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # SSH ключ для доступа
-          SERVER_IP: ${{ secrets.SERVER_IP }}  # IP вашего сервера
+          SERVER_IP: ${{ secrets.SERVER_IP }}  # IP сервера
           USERNAME: ${{ secrets.USERNAME }}  # Имя пользователя для SSH
         run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-
-          ssh $USERNAME@$SERVER_IP "cd /path/to/your/project && git pull && npm install && pm2 restart your-app"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+            docker stop myapp || true
+            docker rm myapp || true
+            docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          EOF
