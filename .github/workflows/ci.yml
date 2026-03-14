@@ -36,7 +36,7 @@ jobs:
 #          SERVER_IP: ${{ secrets.SERVER_IP }}
 #          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
             docker stop myapp || true
             docker rm myapp || true
