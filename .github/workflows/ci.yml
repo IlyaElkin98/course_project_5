@@ -16,7 +16,7 @@ jobs:
         run: |
           pwd
           ls -la
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+          docker buildx build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
 
       - name: Push Docker image to Docker Hub
         run: |
