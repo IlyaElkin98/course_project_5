@@ -210,7 +210,7 @@ if 'test' in sys.argv:
             'NAME': BASE_DIR / 'test_db_sqlite3',
         }
     }
-from django.core.cache.backends.redis import RedisCache
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',

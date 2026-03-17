@@ -13,7 +13,7 @@ services:
         depends_on:
             - db
             - redis
-        end_file:
+        env_file:
             - ./.env
 
     nginx:
@@ -71,8 +71,6 @@ services:
             - db
             - redis
             - celery
-
-
 
 volumes:
     postgres_data:
