@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure-wp*3*d6y^(m%)o^pb-b57shavs0*0p-uy9+zmdt!8yohrsh^h*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -132,6 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'],
@@ -208,3 +210,10 @@ if 'test' in sys.argv:
             'NAME': BASE_DIR / 'test_db_sqlite3',
         }
     }
+from django.core.cache.backends.redis import RedisCache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1'
+    }
+}

@@ -1,4 +1,4 @@
-FROM python:3.13
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -13,8 +13,6 @@ RUN pip install --no-cache-dir -r requirement.txt
 
 COPY . .
 
-RUN mkdir -p /app/media
-
 EXPOSE 8000
 
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8080"]
+# CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8080"]

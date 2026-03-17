@@ -1,26 +1,47 @@
 version: "3.9"
 services:
+    web:
+        build: .
+        command:
+            sh -c "python manage.py collectstatic --noinput &&
+            gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+        volumes:
+            - .:/app
+            - static_volume:/app/staticfiles
+        expose:
+            - "8000"
+        depends_on:
+            - db
+            - redis
+        end_file:
+            - ./.env
+
+    nginx:
+        build: .
+        ports:
+            - "80:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - static_volume:/app/staticfiles
+        depends_on:
+            - web
+
     db:
         image: postgres:17
-        container_name: postgres_db
-        env_file:
-            - ./.env
-        ports:
-            - "5432:5432"
         volumes:
             - postgres_data:/var/lib/postgresql/data
+        env_file:
+            - ./.env
+
         networks:
             - app_network
 
     redis:
         image: redis:7
-        container_name: redis
-        ports:
-            - "6379:6379"
-        env_file:
-            - ./.env
         volumes:
             - redis_data:/data
+        env_file:
+            - ./.env
 
     celery:
         build:
@@ -51,38 +72,8 @@ services:
             - redis
             - celery
 
-    nginx:
-        build: .
-        ports:
-            - "8000:80"
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
-            - ./html:/usr/share/nginx/html
-#    web:
-#        build:
-#            context: .
-#            dockerfile: Dockerfile
-#        container_name: materials
-#        command:
-#            bash -c "python manage.py migrate &&
-#                    python manage.py runserver 0.0.0.0:8000"
-#        ports:
-#            - "8000:8000"
-#        env_file:
-#            - ./.env
-#        volumes:
-#            - .:/code
-#            - static_volume:/code/static
-#        depends_on:
-#            - db
-#            - redis
-#        networks:
-#            - app_network
 
 
-networks:
-    app_network:
-        driver: bridge
 volumes:
     postgres_data:
     redis_data:
